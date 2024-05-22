@@ -5,27 +5,20 @@
 // @description  try to take over the world!
 // @author       You
 // @include     /https:\/\/(www.|)pr0game\.com\/(.*\/)?game\.php.*/
-// // @require      https://cdn.plot.ly/plotly-latest.min.js
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
 // @grant        none
 // ==/UserScript==
 
 (function () {
     'use strict';
-    
-   
-
-    const idsToZero = [202, 203, 208, 209, 210, 214]
-
-    const idsPrevValues = {}
 
     function overview() {
         
         let content = document.getElementsByTagName("content")[0]
 
-        content.getElementsByClassName("infos")[0].remove()
-        content.getElementsByClassName("infos")[1].remove()
-        content.getElementsByClassName("infos")[1].remove()
+        
+        content.getElementsByClassName("infos")[2].remove()
+        content.getElementsByClassName("infos")[2].remove()
         
         
         console.log(content);
@@ -42,38 +35,50 @@
 
         const tbl2 = document.createElement("table");
         const tblBody2 = document.createElement("tbody");
+        
 
         for(let i = 0; i < items.length; i++) {
             
-
-
             var text = items[i].children.item(2).textContent;
             var c = items[i].children.item(2).getAttribute("class");
             console.log(text);
-            const planetNames = text.match(/Planet (\w+) \[(\d+:\d+:\d+)\]/g).map(match => match.replace('Planet ', ''));
+            const planetNames = text.match(/Planet ([\w\s]+) \[(\d+:\d+:\d+)\]/g).map(match => match.replace('Planet ', ''));
+            
+            const positionNamesMatch = text.match(/Position \[(\d+:\d+:\d+)\]/g);
+            var positionNames = ""
+            if(positionNamesMatch != null)
+                positionNames = positionNamesMatch.map(match => match.replace('Position ', ''));
+
             const truemNamesMatch = text.match(/Trümmerfeld \[(\d+:\d+:\d+)\]/g)
             var truemNames = ""
             if(truemNamesMatch != null)             
                 truemNames = truemNamesMatch.map(match => match.replace('Trümmerfeld ', ''));
-            const matches = text.match(/\(([^)]+)\)/g).map(match => match.slice(1, -1));
+            
+                const matches = text.match(/\(([^)]+)\)/g).map(match => match.slice(1, -1));
             const what = text.match(/Mission: (\w+)/g).map(match => match.replace('Mission: ', ''));
             console.log(planetNames,what, matches, truemNames);
 
 
             for(let i = 0 ; i < planetNames.length; i++) {
                 var p = planetNames[i].split(' ')
-                var name = p[0]
-                var coord = p[1]
+                var name = (p.slice(0, -1)).join(' ')
+                var coord = p[p.length - 1]
                 var cc = coord.replace('[', '').replace(']', '').split(':')
                 planetNames[i] = `<a href="game.php?page=galaxy&amp;galaxy=${cc[0]}&amp;system=${cc[1]}">${name} ${coord}</a>`
             }
-
 
             for(let i = 0 ; i < truemNames.length; i++) {
                 var p = truemNames[i].split(' ')
                 var coord = p[0]
                 var cc = coord.replace('[', '').replace(']', '').split(':')
                 truemNames[i] = `<a href="game.php?page=galaxy&amp;galaxy=${cc[0]}&amp;system=${cc[1]}">${coord}</a>`
+            }
+
+            for(let i = 0 ; i < positionNames.length; i++) {
+                var p = positionNames[i].split(' ')
+                var coord = p[0]
+                var cc = coord.replace('[', '').replace(']', '').split(':')
+                positionNames[i] = `<a href="game.php?page=galaxy&amp;galaxy=${cc[0]}&amp;system=${cc[1]}">${coord}</a>`
             }
 
             if(matches.length == 2) {
@@ -83,7 +88,23 @@
                 matches[1] = matches[1].replace('Deuterium', 'D')
                 matches[1] = matches[1].replace(/;/g, '</br>')
             }
+            matches[0] = matches[0].replace('Kleiner Transporter', 'kt')
+            matches[0] = matches[0].replace('Großer Transporter', 'gt')
+            matches[0] = matches[0].replace('Leichter Jäger', 'lj')
+            matches[0] = matches[0].replace('Schwerer Jäger', 'sj')
+            matches[0] = matches[0].replace('Kreuzer', 'xer')
+            matches[0] = matches[0].replace('Schlachtschiff', 'ss')
+            matches[0] = matches[0].replace('Bomber', 'bm')
+            matches[0] = matches[0].replace('Zerstörer', 'zd')
+            matches[0] = matches[0].replace('Todesstern', 'ts')
+            matches[0] = matches[0].replace('Recycler', 'rc')
+            matches[0] = matches[0].replace('Spionagesonde', 'sp')
+            matches[0] = matches[0].replace('Solarsatellit', 'sl')
+            matches[0] = matches[0].replace('Kolonieschiff', 'ks')
+            matches[0] = matches[0].replace('Schlachtkreuzer', 'sxer')
             matches[0] = matches[0].replace(/;/g, '</br>')
+
+
             
 
             let arrow = ''
@@ -109,18 +130,27 @@
             cell = document.createElement("td");
             cell.innerHTML = `${items[i].children.item(1).outerHTML}`;
             row.appendChild(cell);
-
+            const returns = text.includes("zurück")
             cell = document.createElement("td");
-            if(planetNames.length > 1) {
-                cell.innerHTML = `${planetNames[0]}</br>${arrow} ${planetNames[1]}`;
-            }else{
-                if(truemNames.length == 1){
-                    cell.innerHTML = `${planetNames[0]}</br>${arrow} Trümmerfeld ${truemNames[0]}`;
-                }else{
-                    cell.innerHTML = `${planetNames[0]}</br>${arrow}`
-                }
-
+            
+            
+            switch(what[0]) {
+                case 'Angreifen':
+                case 'Transport':
+                case 'Stationieren':
+                    cell.innerHTML = `von: ${planetNames[0]}</br>nach: ${planetNames[1]}`;
+                    break;
+                case 'Abbauen':
+                    cell.innerHTML = `von: ${planetNames[0]}</br>nach: Trümmerfeld ${truemNames[0]}`;
+                    break;
+                case 'Expedition':
+                    cell.innerHTML = `von: ${planetNames[0]}</br>nach: Position ${positionNames[0]}`;
+                    break;
             }
+                
+
+
+            
             row.appendChild(cell);
 
 
@@ -130,15 +160,6 @@
             }
             row.appendChild(cell);
 
-
-            
-
-            // cell = document.createElement("td");
-            // cell.innerHTML = `${items[i].children.item(3).outerHTML}`;
-            // row.appendChild(cell);
-
-            
-            
 
             if(text.includes("zurück")) {
                 tbl2.appendChild(row);
@@ -160,45 +181,6 @@
         list.parentElement.appendChild(listCopy);
         list.remove()
             
-
-
-        var trace1 = {
-            type: 'bar',
-            x: [1, 2, 3, 4],
-            y: [5, 10, 2, 8],
-            marker: {
-                color: '#C8A2C8',
-                line: {
-                    width: 2.5
-                }
-            }
-          };
-          
-          var data = [ trace1 ];
-          
-          var layout = { 
-            title: 'Responsive to window\'s size!',
-            font: {size: 18}
-          };
-          
-          var config = {responsive: true}
-          
-        //   Plotly.newPlot(div, data, layout, config );
-            
-            
-        //     if(planetNames.length > 1) {
-        //         items[i].children.item(2).innerHTML = `</div style="width=300"><b>${what[0]}</b>: <span style="color: #aaaaaa">${planetNames[0]} ${arrow} ${planetNames[1]}</br>${matches[0]}</span>`
-        //         if(matches.length > 1)
-        //          items[i].children.item(2).innerHTML = items[i].children.item(2).innerHTML + `</br><span style="color: #aaaaaa">${matches[1]}</span>`
-                
-        //     }else { 
-        //         items[i].children.item(2).innerHTML = `&emsp;&emsp;&emsp;&emsp;&emsp;<b>${what[0]}</b>: ${arrow} ${planetNames[0]}</br><span style="color: #aaaaaa">${matches[0]}</span>` 
-        //     }
-
-          
-        //     // table.rows[i].cells[2].firstElementChild.rows[0].remove()
-        // }
-    
     }
 
     function stats() {
