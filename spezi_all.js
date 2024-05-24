@@ -6,7 +6,6 @@
 // @author       You
 // @include     /https:\/\/(www.|)pr0game\.com\/(.*\/)?game\.php.*/
 // @icon         data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
-// @require      file:///home/jtfc/Documents/Projekte/pr0Game/Scripts/fleet.js
 // @grant        none
 // ==/UserScript==
 
@@ -126,9 +125,6 @@
             matches[0] = matches[0].replace(/;/g, '</br>')
             matches[0] = matches[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
 
-
-
-
             let arrow = ''
             if (what == 'Angreifen') arrow = '↠'
             if (what == 'Transport') arrow = '⇄'
@@ -171,54 +167,6 @@
             }
             row.appendChild(cell);
 
-        //     // start the animation
-        //     cell = document.createElement("td");
-        //     let div0 = document.createElement("div")
-        //     div0.setAttribute("class", ".container")
-    
-        //     let div2 = document.createElement("div")
-        //     div2.setAttribute("class", "spaceship")
-            
-        //     const s = convertToSeconds(items[i].children.item(1).innerHTML);
-    
-        //     let style = document.createElement("style")
-        //     style.innerHTML = `
-        //     <style>
-            
-        //     .container {
-        //         // display: flex;
-        //         align-items: center;
-        //         position: relative;
-        //         width: 200px;
-        //         height: 100px;
-        //     }
-    
-        //     .spaceship {
-        //         width: 0;
-        //         height: 0;
-        //         border-left: 2px solid transparent;
-        //         border-right: 2px solid transparent;
-        //         border-bottom: 4px solid red;
-        //         position: relative;
-        //         animation: moveSpaceship ${s}s linear 1;
-        //     }
-        //     @keyframes moveSpaceship {
-        //         0% {
-        //             left: 0;
-        //         }
-        //         100% {
-        //             left: calc(100% - 60px); /* Adjust for the width of the planet and some margin */
-        //         }
-        //     }
-        // </style>
-        //     `;
-    
-        //     row.appendChild(style);
-        //     row.appendChild(div0);
-        //     div0.appendChild(div2);
-
-            //end the animation
-
 
             cell = document.createElement("td");
             cell.setAttribute("width", "20%");
@@ -234,35 +182,13 @@
                 tblBody.appendChild(row);
             }
         }
-
-        // add the row to the end of the table body
         tbl.appendChild(tblBody);
         tbl2.appendChild(tblBody2);
-        // appends <table> into <body>
-        // sets the border attribute of tbl to '2'
-        // tbl.setAttribute("border", "2");
-     
-        
+
         list.parentElement.appendChild(tbl);
         list.parentElement.appendChild(tbl2);
-        
-        let p2 = document.createElement("p")
-        p2.innerHTML = `
-        <a  href="game.php?page=fleetTable&galaxy=2&system=210&planet=8&planettype=1&target_mission=1">Attack [2:210:8]</a></br>
-        <a  href="game.php?page=fleetTable&galaxy=2&system=210&planet=9&planettype=1&target_mission=1">Attack [2:210:9]</a></br>
-        <a  href="game.php?page=fleetTable&galaxy=2&system=213&planet=7&planettype=1&target_mission=1">Attack [2:213:7]</a></br>
-        `
-        list.parentElement.appendChild(p2);
         list.parentElement.appendChild(listCopy);
-        
-
-        
-        
-
         list.remove()
-
-
-     
     }
 
     function stats() {
@@ -298,6 +224,18 @@
     }
 
     function main() {
+
+        let menu = document.getElementsByTagName("menu")[0]
+        let list = menu.getElementsByTagName("ul")[0]
+        let pos = list.getElementsByClassName("menu-separator")[1]
+        let p2 = document.createElement("p")
+        p2.innerHTML = `
+        <li><a  href="game.php?page=fleetTable&galaxy=2&system=210&planet=8&planettype=1&target_mission=1">Attack [2:210:8]</a></li>
+        <li><a  href="game.php?page=fleetTable&galaxy=2&system=210&planet=9&planettype=1&target_mission=1">Attack [2:210:9]</a></li>
+        <li><a  href="game.php?page=fleetTable&galaxy=2&system=213&planet=7&planettype=1&target_mission=1">Attack [2:213:7]</a></li>
+        `
+        // list.parentElement.appendChild(p2);
+        pos.insertAdjacentElement('afterend', p2);
 
         let hasFleet = document.getElementById("fleetTable");
         if (hasFleet) fleet();
