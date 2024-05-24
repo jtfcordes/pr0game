@@ -106,6 +106,8 @@
                 matches[1] = matches[1].replace('Kristall', 'K')
                 matches[1] = matches[1].replace('Deuterium', 'D')
                 matches[1] = matches[1].replace(/;/g, '</br>')
+                matches[1] = matches[1].replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
+                
             }
             matches[0] = matches[0].replace('Kleiner Transporter', 'kt')
             matches[0] = matches[0].replace('Großer Transporter', 'gt')
@@ -122,6 +124,7 @@
             matches[0] = matches[0].replace('Kolonieschiff', 'ks')
             matches[0] = matches[0].replace('Schlachtkreuzer', 'sxer')
             matches[0] = matches[0].replace(/;/g, '</br>')
+            matches[0] = matches[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
 
 
 
@@ -135,7 +138,7 @@
 
             const row = document.createElement("tr");
             var cell = document.createElement("td");
-            cell.setAttribute("width", "20%");
+            cell.setAttribute("width", "15%");
             cell.innerHTML = `<span class="${c}">${what}</span>`;
             row.appendChild(cell);
 
@@ -151,7 +154,7 @@
     
         
             cell = document.createElement("td");
-            cell.setAttribute("width", "20%");
+            cell.setAttribute("width", "25%");
 
             switch (what[0]) {
                 case 'Angreifen':
@@ -244,7 +247,7 @@
         list.parentElement.appendChild(tbl2);
         
         let p2 = document.createElement("p")
-        p2.innerHTML = `↠ Angreifen, ⇄ Transport, ⇴ Stationieren, ↯ Expedition</br>
+        p2.innerHTML = `
         <a  href="game.php?page=fleetTable&galaxy=2&system=210&planet=8&planettype=1&target_mission=1">Attack [2:210:8]</a></br>
         <a  href="game.php?page=fleetTable&galaxy=2&system=210&planet=9&planettype=1&target_mission=1">Attack [2:210:9]</a></br>
         <a  href="game.php?page=fleetTable&galaxy=2&system=213&planet=7&planettype=1&target_mission=1">Attack [2:213:7]</a></br>
