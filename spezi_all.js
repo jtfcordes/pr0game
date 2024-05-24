@@ -15,18 +15,23 @@ function convertToSeconds(timeStr) {
     // Use regular expressions to extract the minutes and seconds
     const minutesMatch = timeStr.match(/(\d+)m/);
     const secondsMatch = timeStr.match(/(\d+)s/);
+    const hoursMatch = timeStr.match(/(\d+)h/);
+    const daysMatch = timeStr.match(/(\d+)d/);
 
     // Convert the matched strings to integers
     const minutes = minutesMatch ? parseInt(minutesMatch[1], 10) : 0;
     const seconds = secondsMatch ? parseInt(secondsMatch[1], 10) : 0;
+    const hours = hoursMatch ? parseInt(hoursMatch[1], 10) : 0;
+    const days = daysMatch ? parseInt(daysMatch[1], 10) : 0;
+
 
     // Calculate the total seconds
-    const totalSeconds = (minutes * 60) + seconds;
+    const totalSeconds  = (days * 24 * 60 * 60) + (hours * 60 * 60) + (minutes * 60) + seconds;
 
     return totalSeconds;
 }
 
-function overview() {
+function overview(warning_min=5, sort=true) {
     
 
     let content = document.getElementsByTagName("content")[0]
@@ -144,7 +149,16 @@ function overview() {
 
         cell = document.createElement("td");
         cell.setAttribute("width", "20%");
-        cell.innerHTML = `${items[i].children.item(0).outerHTML}</br>${items[i].children.item(1).outerHTML}`;
+        if(convertToSeconds(items[i].children.item(1).outerHTML) < warning_min*60){
+            cell.innerHTML = `${items[i].children.item(0).outerHTML}</br><span style="color:red;">${items[i].children.item(1).outerHTML}</span>`;
+        } else if(convertToSeconds(items[i].children.item(1).outerHTML) < 30*60){
+            cell.innerHTML = `${items[i].children.item(0).outerHTML}</br><span style="color:orange;">${items[i].children.item(1).outerHTML}</span>`;
+        } else if(convertToSeconds(items[i].children.item(1).outerHTML) > 100*60){
+            cell.innerHTML = `${items[i].children.item(0).outerHTML}</br><span style="color:grey;">${items[i].children.item(1).outerHTML}</span>`;
+        
+        }else{
+            cell.innerHTML = `${items[i].children.item(0).outerHTML}</br>${items[i].children.item(1).outerHTML}`;
+        }
         row.appendChild(cell);
 
     
@@ -174,18 +188,32 @@ function overview() {
         }
         row.appendChild(cell);
 
-
-        if (text.includes("zurück")) {
-            tbl2.appendChild(row);
-        } else {
+        if(sort){
+            if (text.includes("zurück")) {
+                tblBody2.appendChild(row);
+            } else {
+                tblBody.appendChild(row);
+            }
+        }else{
             tblBody.appendChild(row);
         }
     }
     tbl.appendChild(tblBody);
     tbl2.appendChild(tblBody2);
 
+    if(sort) {
+        let h = document.createElement("p")
+        h.textContent = "Hinweg: ";
+        list.parentElement.appendChild(h);
+    }
     list.parentElement.appendChild(tbl);
+    if(sort) {
+        let h = document.createElement("p")
+        h.textContent = "Rückweg: ";
+        list.parentElement.appendChild(h);
+    }
     list.parentElement.appendChild(tbl2);
+
     list.parentElement.appendChild(listCopy);
     list.remove()
 }
@@ -230,16 +258,17 @@ function main(raids) {
     let menu = document.getElementsByTagName("menu")[0]
     let list = menu.getElementsByTagName("ul")[0]
     let pos = list.getElementsByClassName("menu-separator")[1]
-    let p2 = document.createElement("p")
-
+    
     for(let i = 0; i < raids.length; i++) {
+        let li = document.createElement("li")
         let d = raids[i].split(":");
-        p2.innerHTML = p2.innerHTML+ `<li><a  href="game.php?page=fleetTable&galaxy=${d[0]}&system=${d[1]}&planet=${d[2]}&planettype=1&target_mission=1">Attack [2:210:8]</a></li>`       
+        li.innerHTML = `<a href="game.php?page=fleetTable&galaxy=${d[0]}&system=${d[1]}&planet=${d[2]}&planettype=1&target_mission=1">Attack [${raids[i]}]</a>`       
+        pos.insertAdjacentElement('afterend', li);
+        pos = li
     }
-    
-    
-    // list.parentElement.appendChild(p2);
-    pos.insertAdjacentElement('afterend', p2);
+    li = document.createElement("li")
+    li.setAttribute("class", "menu-separator")
+    pos.insertAdjacentElement('afterend', li);
 
 
 }
