@@ -224,16 +224,17 @@
     }
 
     function main() {
-
         let menu = document.getElementsByTagName("menu")[0]
         let list = menu.getElementsByTagName("ul")[0]
         let pos = list.getElementsByClassName("menu-separator")[1]
         let p2 = document.createElement("p")
-        p2.innerHTML = `
-        <li><a  href="game.php?page=fleetTable&galaxy=2&system=210&planet=8&planettype=1&target_mission=1">Attack [2:210:8]</a></li>
-        <li><a  href="game.php?page=fleetTable&galaxy=2&system=210&planet=9&planettype=1&target_mission=1">Attack [2:210:9]</a></li>
-        <li><a  href="game.php?page=fleetTable&galaxy=2&system=213&planet=7&planettype=1&target_mission=1">Attack [2:213:7]</a></li>
-        `
+
+        for(let i = 0; i < raids; i++) {
+            let d = raids[i].split(":");
+            p2.innerHTML = p2.innerHTML+ `<li><a  href="game.php?page=fleetTable&galaxy=${d[0]}&system=${d[1]}&planet=${d[2]}&planettype=1&target_mission=1">Attack [2:210:8]</a></li>`       
+        }
+     
+        
         // list.parentElement.appendChild(p2);
         pos.insertAdjacentElement('afterend', p2);
 
@@ -250,7 +251,9 @@
 
     }
 
-
+    if(raids == undefined) {
+        raids = []
+    }
 
     main()
 })();
