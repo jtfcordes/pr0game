@@ -282,6 +282,8 @@ function main(raids) {
 }
 
 function replaceSkinText(raids) {
+    if(!raids) return;
+
 var elements = document.getElementsByTagName('*');
 
 for (var i = 0; i < elements.length; i++) {
@@ -293,26 +295,73 @@ for (var i = 0; i < elements.length; i++) {
         if (node.nodeType === 3) {
             var text = node.textContent;
             
+            // general
             text = text.replace(/Imperator/g, 'Kapt`n')
             text = text.replace(/Energie/g, 'Nahrung')
             text = text.replace(/Kristall/g, 'Gold')
             text = text.replace(/Metallmine/g, 'Holzfäller')
             text = text.replace(/Metall/g, 'Holz')
+            text = text.replace(/Deuteriumsynthetisierer/g, 'Destille')
             text = text.replace(/Deuterium/g, 'Rum')
+            text = text.replace(/Battle Hall/g, 'Bordell')
+
+            // gebäude
             text = text.replace(/Fusionskraftwerk/g, 'Fleischerei')
             text = text.replace(/Roboterfabrik/g, 'Hafen')
             text = text.replace(/Nanitenfabrik/g, 'Sklavenmarkt')
-            text = text.replace(/Stationieren/g, 'Überfahrt')
-            text = text.replace(/Planet/g, 'Hafen')
-            text = text.replace(/Solarsatellit/g, 'Schmugglerboot')
-            text = text.replace(/Recycler/g, 'Entermannschaft')
-            text = text.replace(/Todesstern/g, 'Schwimmende Festung')
-            text = text.replace(/Galaxie/g, 'Weltmeer')
-            text = text.replace(/Galaxy/g, 'Weltmeer')
-            text = text.replace(/Spionagesonde/g, 'Spione')
             text = text.replace(/Solarkraftwerk/g, 'Windmühle')
             text = text.replace(/TechnoDome/g, 'Bibliothek')
             text = text.replace(/Raumschiffwerft/g, 'Schiffwerft')
+            text = text.replace(/Raketensilo/g, 'Waffenschmiede')
+            text = text.replace(/Terraformer/g, 'Hafenanlage')          
+            
+            // flotte
+            text = text.replace(/Stationieren/g, 'Überfahrt')
+
+            // schiffe
+            text = text.replace(/Solarsatellit/g, 'Schmugglerboot')
+            text = text.replace(/Recycler/g, 'Entermannschaft')
+            text = text.replace(/Todesstern/g, 'Schwimmende Festung')
+            text = text.replace(/Spionagesonde/g, 'Spione')
+            
+            // Galaxy
+            text = text.replace(/Planet/g, 'Hafen')
+            text = text.replace(/Galaxie/g, 'Weltmeer')
+            text = text.replace(/Galaxy/g, 'Weltmeer')
+            text = text.replace(/Mond/g, 'Eiland')
+
+            // Forschung
+            text = text.replace(/Computertechnik/g, 'Drucktechnik')
+            text = text.replace(/Schildtechnik/g, 'Schifftechnik')
+            text = text.replace(/Raumschiffpanzerung/g, 'Schiffpanzerung')
+            text = text.replace(/Nahrungtechnik/g, 'Kochkunst')
+            text = text.replace(/Hyperraumtechnik/g, 'Takelage')
+            text = text.replace(/Hyperraumantrieb/g, 'Segeln')
+            text = text.replace(/Impulstriebwerk/g, 'Navigation')
+            text = text.replace(/Verbrennungstriebwerk/g, 'Kartographie')
+            text = text.replace(/Lasertechnik/g, 'Zauberei')
+            text = text.replace(/Ionentechnik/g, 'Alchemie')
+            text = text.replace(/Plasmatechnik/g, 'Pyrotechnik')
+            text = text.replace(/Intergalaktisches Forschungsnetzwerk/g, 'Kapitänsbuch')
+            text = text.replace(/Astrophysik/g, 'Astronomie')
+            text = text.replace(/Gravitonforschung/g, 'Verdrängungforschung')
+
+
+            
+
+            
+
+            
+
+            
+            
+            
+             
+            
+
+            
+            
+
              
             node.textContent = text;
         }

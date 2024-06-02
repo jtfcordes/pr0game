@@ -29,6 +29,6 @@
     if (hasOverview) overview(warning_mins, true);
 
 
-    replaceSkinText();
+    replaceSkinText(true);
     
 })();
