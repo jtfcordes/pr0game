@@ -348,7 +348,7 @@ for (var i = 0; i < elements.length; i++) {
 
 
             
-
+            text = text.replace(/Raumschiffwracks/g, 'Schiffwracks')
             
 
             
