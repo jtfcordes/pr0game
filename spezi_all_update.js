@@ -18,14 +18,17 @@
     main(raids)
 
 
-    // let hasFleet = document.getElementById("fleetTable");
-    // if (hasFleet) fleet();
+    let hasFleet = document.getElementById("fleetTable");
+    if (hasFleet) fleet();
 
     let hasStats = document.getElementById("statistics");
     if (hasStats) stats();
 
     let warning_mins = 5.0;
     let hasOverview = document.getElementById("overview");
-    if (hasOverview) overview(warning_mins);
+    if (hasOverview) overview(warning_mins, true);
 
+
+    replaceSkinText();
+    
 })();

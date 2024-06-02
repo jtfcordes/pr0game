@@ -239,10 +239,19 @@ function stats() {
 function fleet() {
     let content = document.getElementsByTagName("content")[0]
     let table = content.getElementsByTagName("table")[0]
+    let table1 = content.getElementsByTagName("table")[1]
     // let row = table.rows[2]
-
+    for (let i = 2; i < table1.rows.length-3; i++) {
+        let child = table1.rows[i].cells[0].firstElementChild;
+        if(!child)continue;
+        let text = document.createElement("div")
+        text.innerHTML = child.getAttribute('data-tooltip-content');
+    
+        table1.rows[i].cells[0].innerHTML = table1.rows[i].cells[0].innerHTML+" ("+text.textContent.replace("Geschwindigkeit: ","")/10000+")";
+    }
     for (let i = 2; i < table.rows.length; i++) {
-        let text = table.rows[i].cells[2].firstElementChild.getAttribute('data-tooltip-content');
+        
+        text = table.rows[i].cells[2].firstElementChild.getAttribute('data-tooltip-content');
         table.rows[i].cells[2].firstElementChild.remove();
         table.rows[i].cells[2].innerHTML = text;
         table.rows[i].cells[2].firstElementChild.rows[0].remove();
@@ -270,8 +279,45 @@ function main(raids) {
     li.setAttribute("class", "menu-separator")
     pos.insertAdjacentElement('afterend', li);
 
-
 }
 
+function replaceSkinText(raids) {
+var elements = document.getElementsByTagName('*');
+
+for (var i = 0; i < elements.length; i++) {
+    var element = elements[i];
+
+    for (var j = 0; j < element.childNodes.length; j++) {
+        var node = element.childNodes[j];
+
+        if (node.nodeType === 3) {
+            var text = node.textContent;
+            
+            text = text.replace(/Imperator/g, 'Kapt`n')
+            text = text.replace(/Energie/g, 'Nahrung')
+            text = text.replace(/Kristall/g, 'Gold')
+            text = text.replace(/Metallmine/g, 'Holzfäller')
+            text = text.replace(/Metall/g, 'Holz')
+            text = text.replace(/Deuterium/g, 'Rum')
+            text = text.replace(/Fusionskraftwerk/g, 'Fleischerei')
+            text = text.replace(/Roboterfabrik/g, 'Hafen')
+            text = text.replace(/Nanitenfabrik/g, 'Sklavenmarkt')
+            text = text.replace(/Stationieren/g, 'Überfahrt')
+            text = text.replace(/Planet/g, 'Hafen')
+            text = text.replace(/Solarsatellit/g, 'Schmugglerboot')
+            text = text.replace(/Recycler/g, 'Entermannschaft')
+            text = text.replace(/Todesstern/g, 'Schwimmende Festung')
+            text = text.replace(/Galaxie/g, 'Weltmeer')
+            text = text.replace(/Galaxy/g, 'Weltmeer')
+            text = text.replace(/Spionagesonde/g, 'Spione')
+            text = text.replace(/Solarkraftwerk/g, 'Windmühle')
+            text = text.replace(/TechnoDome/g, 'Bibliothek')
+            text = text.replace(/Raumschiffwerft/g, 'Schiffwerft')
+             
+            node.textContent = text;
+        }
+    }
+}
+}
 
 
