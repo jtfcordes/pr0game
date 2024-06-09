@@ -64,7 +64,8 @@ function overview(warning_min=5, sort=true) {
         var text = items[i].children.item(2).textContent;
         var c = items[i].children.item(2).getAttribute("class");
         console.log(text);
-        const planetNames = text.match(/Planet ([\w\s]+) \[(\d+:\d+:\d+)\]/g).map(match => match.replace('Planet ', ''));
+        const planetNames = text.match(/(Planet|Mond) ([\w\s]+) \[(\d+:\d+:\d+)\]/g).map(match => match.replace('Planet ', ''));
+       
 
         const positionNamesMatch = text.match(/Position \[(\d+:\d+:\d+)\]/g);
         var positionNames = ""
