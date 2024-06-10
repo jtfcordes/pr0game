@@ -241,18 +241,61 @@ function fleet() {
     let content = document.getElementsByTagName("content")[0]
     let table = content.getElementsByTagName("table")[0]
     let table1 = content.getElementsByTagName("table")[1]
-    // let row = table.rows[2]
+    
+    
+    // Neuer Auftrag
     for (let i = 2; i < table1.rows.length-3; i++) {
         let child = table1.rows[i].cells[0].firstElementChild;
         if(!child)continue;
         let text = document.createElement("div")
         text.innerHTML = child.getAttribute('data-tooltip-content');
-    
         table1.rows[i].cells[0].innerHTML = table1.rows[i].cells[0].innerHTML+" ("+text.textContent.replace("Geschwindigkeit: ","")/10000+")";
     }
+
+
+    table.rows[0].cells[0].setAttribute("colspan", "12");
+
+    var td = document.createElement("td")
+    td.textContent = "Ressourcen";
+    table.rows[1].cells[2].insertAdjacentElement('afterend',td );
+
+    // Flotte
     for (let i = 2; i < table.rows.length; i++) {
         
+        // cell 1
+        text = table.rows[i].cells[1].firstElementChild.getAttribute('data-tooltip-content');
+        var t = document.createElement("table")
+        t.innerHTML = text;
+        var td = document.createElement("td")
+        met = t.rows[0].cells[1].textContent;
+        kris = t.rows[1].cells[1].textContent;
+        deut = t.rows[2].cells[1].textContent;
+        console.log(met, kris, deut);
+        td.innerHTML = met + " M</br>" + kris + " K</br>" + deut + " D";
+        td.innerHTML = td.innerHTML.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
+
+        table.rows[i].cells[2].insertAdjacentElement('afterend', td);
+
+        // cell 2
         text = table.rows[i].cells[2].firstElementChild.getAttribute('data-tooltip-content');
+        text = text.replace('Kleiner Transporter', 'kt')
+        text = text.replace('Großer Transporter', 'gt')
+        text = text.replace('Leichter Jäger', 'lj')
+        text = text.replace('Schwerer Jäger', 'sj')
+        text = text.replace('Kreuzer', 'xer')
+        text = text.replace('Schlachtschiff', 'ss')
+        text = text.replace('Bomber', 'bm')
+        text = text.replace('Zerstörer', 'zd')
+        text = text.replace('Todesstern', 'ts')
+        text = text.replace('Recycler', 'rc')
+        text = text.replace('Spionagesonde', 'spio')
+        text = text.replace('Solarsatellit', 'sl')
+        text = text.replace('Kolonieschiff', 'ks')
+        text = text.replace('Schlachtkreuzer', 'sxer')
+        text = text.replace(/;/g, '</br>')
+        text = text.replace(/(?=(\d{3})+(?!\d))/g, '$1.')
+
+
         table.rows[i].cells[2].firstElementChild.remove();
         table.rows[i].cells[2].innerHTML = text;
         table.rows[i].cells[2].firstElementChild.rows[0].remove();
