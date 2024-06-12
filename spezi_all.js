@@ -278,7 +278,7 @@ function main(raids) {
     for (let i = 0; i < raids.length; i++) {
         let li = document.createElement("li")
         let d = raids[i].split(":");
-        li.innerHTML = `<a href="game.php?page=fleetTable&galaxy=${d[0]}&system=${d[1]}&planet=${d[2]}&planettype=1&target_mission=1">Attack [${raids[i]}]</a>`
+        li.innerHTML = `<a href="game.php?page=fleetTable&galaxy=${d[0]}&system=${d[1]}&planet=${d[2]}&planettype=1&target_mission=1">A:[${raids[i]}]</a>`
         pos.insertAdjacentElement('afterend', li);
         pos = li
     }
