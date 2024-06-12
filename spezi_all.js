@@ -26,22 +26,16 @@ function convertToSeconds(timeStr) {
 
 
     // Calculate the total seconds
-    const totalSeconds  = (days * 24 * 60 * 60) + (hours * 60 * 60) + (minutes * 60) + seconds;
+    const totalSeconds = (days * 24 * 60 * 60) + (hours * 60 * 60) + (minutes * 60) + seconds;
 
     return totalSeconds;
 }
 
-function overview(warning_min=5, sort=true) {
-    
-
+function overview(warning_min = 5, sort = true) {
     let content = document.getElementsByTagName("content")[0]
-
-
     content.getElementsByClassName("infos")[2].remove()
     content.getElementsByClassName("infos")[2].remove()
-
-
-    console.log(content);
+    // console.log(content);
     let list = content.getElementsByTagName("ul")[0];
     list.setAttribute("style", "text-align: left;")
     var items = list.getElementsByTagName("li");
@@ -63,9 +57,9 @@ function overview(warning_min=5, sort=true) {
 
         var text = items[i].children.item(2).textContent;
         var c = items[i].children.item(2).getAttribute("class");
-        console.log(text);
+        // console.log(text);
         const planetNames = text.match(/(Planet|Mond) ([\w\s]+) \[(\d+:\d+:\d+)\]/g).map(match => match.replace('Planet ', ''));
-       
+
 
         const positionNamesMatch = text.match(/Position \[(\d+:\d+:\d+)\]/g);
         var positionNames = ""
@@ -111,24 +105,8 @@ function overview(warning_min=5, sort=true) {
             matches[1] = matches[1].replace('Deuterium', 'D')
             matches[1] = matches[1].replace(/;/g, '</br>')
             matches[1] = matches[1].replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
-            
+
         }
-        matches[0] = matches[0].replace('Kleiner Transporter', 'kt')
-        matches[0] = matches[0].replace('Großer Transporter', 'gt')
-        matches[0] = matches[0].replace('Leichter Jäger', 'lj')
-        matches[0] = matches[0].replace('Schwerer Jäger', 'sj')
-        matches[0] = matches[0].replace('Kreuzer', 'xer')
-        matches[0] = matches[0].replace('Schlachtschiff', 'ss')
-        matches[0] = matches[0].replace('Bomber', 'bm')
-        matches[0] = matches[0].replace('Zerstörer', 'zd')
-        matches[0] = matches[0].replace('Todesstern', 'ts')
-        matches[0] = matches[0].replace('Recycler', 'rc')
-        matches[0] = matches[0].replace('Spionagesonde', 'sp')
-        matches[0] = matches[0].replace('Solarsatellit', 'sl')
-        matches[0] = matches[0].replace('Kolonieschiff', 'ks')
-        matches[0] = matches[0].replace('Schlachtkreuzer', 'sxer')
-        matches[0] = matches[0].replace(/;/g, '</br>')
-        matches[0] = matches[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
 
         let arrow = ''
         if (what == 'Angreifen') arrow = '↠'
@@ -150,19 +128,19 @@ function overview(warning_min=5, sort=true) {
 
         cell = document.createElement("td");
         cell.setAttribute("width", "20%");
-        if(convertToSeconds(items[i].children.item(1).outerHTML) < warning_min*60){
+        if (convertToSeconds(items[i].children.item(1).outerHTML) < warning_min * 60) {
             cell.innerHTML = `${items[i].children.item(0).outerHTML}</br><span style="color:red;">${items[i].children.item(1).outerHTML}</span>`;
-        } else if(convertToSeconds(items[i].children.item(1).outerHTML) < 30*60){
+        } else if (convertToSeconds(items[i].children.item(1).outerHTML) < 30 * 60) {
             cell.innerHTML = `${items[i].children.item(0).outerHTML}</br><span style="color:orange;">${items[i].children.item(1).outerHTML}</span>`;
-        } else if(convertToSeconds(items[i].children.item(1).outerHTML) > 100*60){
+        } else if (convertToSeconds(items[i].children.item(1).outerHTML) > 100 * 60) {
             cell.innerHTML = `${items[i].children.item(0).outerHTML}</br><span style="color:grey;">${items[i].children.item(1).outerHTML}</span>`;
-        
-        }else{
+
+        } else {
             cell.innerHTML = `${items[i].children.item(0).outerHTML}</br>${items[i].children.item(1).outerHTML}`;
         }
         row.appendChild(cell);
 
-    
+
         cell = document.createElement("td");
         cell.setAttribute("width", "25%");
 
@@ -189,26 +167,26 @@ function overview(warning_min=5, sort=true) {
         }
         row.appendChild(cell);
 
-        if(sort){
+        if (sort) {
             if (text.includes("zurück")) {
                 tblBody2.appendChild(row);
             } else {
                 tblBody.appendChild(row);
             }
-        }else{
+        } else {
             tblBody.appendChild(row);
         }
     }
     tbl.appendChild(tblBody);
     tbl2.appendChild(tblBody2);
 
-    if(sort) {
+    if (sort) {
         let h = document.createElement("p")
         h.textContent = "Hinweg: ";
         list.parentElement.appendChild(h);
     }
     list.parentElement.appendChild(tbl);
-    if(sort) {
+    if (sort) {
         let h = document.createElement("p")
         h.textContent = "Rückweg: ";
         list.parentElement.appendChild(h);
@@ -241,15 +219,15 @@ function fleet() {
     let content = document.getElementsByTagName("content")[0]
     let table = content.getElementsByTagName("table")[0]
     let table1 = content.getElementsByTagName("table")[1]
-    
-    
+
+
     // Neuer Auftrag
-    for (let i = 2; i < table1.rows.length-3; i++) {
+    for (let i = 2; i < table1.rows.length - 3; i++) {
         let child = table1.rows[i].cells[0].firstElementChild;
-        if(!child)continue;
+        if (!child) continue;
         let text = document.createElement("div")
         text.innerHTML = child.getAttribute('data-tooltip-content');
-        table1.rows[i].cells[0].innerHTML = table1.rows[i].cells[0].innerHTML+" ("+text.textContent.replace("Geschwindigkeit: ","")/10000+")";
+        table1.rows[i].cells[0].innerHTML = table1.rows[i].cells[0].innerHTML + " (" + text.textContent.replace("Geschwindigkeit: ", "") / 10000 + ")";
     }
 
 
@@ -257,11 +235,11 @@ function fleet() {
 
     var td = document.createElement("td")
     td.textContent = "Ressourcen";
-    table.rows[1].cells[2].insertAdjacentElement('afterend',td );
+    table.rows[1].cells[2].insertAdjacentElement('afterend', td);
 
     // Flotte
     for (let i = 2; i < table.rows.length; i++) {
-        
+
         // cell 1
         text = table.rows[i].cells[1].firstElementChild.getAttribute('data-tooltip-content');
         var t = document.createElement("table")
@@ -278,22 +256,7 @@ function fleet() {
 
         // cell 2
         text = table.rows[i].cells[2].firstElementChild.getAttribute('data-tooltip-content');
-        text = text.replace('Kleiner Transporter', 'kt')
-        text = text.replace('Großer Transporter', 'gt')
-        text = text.replace('Leichter Jäger', 'lj')
-        text = text.replace('Schwerer Jäger', 'sj')
-        text = text.replace('Kreuzer', 'xer')
-        text = text.replace('Schlachtschiff', 'ss')
-        text = text.replace('Bomber', 'bm')
-        text = text.replace('Zerstörer', 'zd')
-        text = text.replace('Todesstern', 'ts')
-        text = text.replace('Recycler', 'rc')
-        text = text.replace('Spionagesonde', 'spio')
-        text = text.replace('Solarsatellit', 'sl')
-        text = text.replace('Kolonieschiff', 'ks')
-        text = text.replace('Schlachtkreuzer', 'sxer')
-        text = text.replace(/;/g, '</br>')
-        text = text.replace(/(?=(\d{3})+(?!\d))/g, '$1.')
+
 
 
         table.rows[i].cells[2].firstElementChild.remove();
@@ -304,18 +267,18 @@ function fleet() {
 }
 
 function main(raids) {
-    if(raids == undefined) {
+    if (raids == undefined) {
         raids = []
     }
 
     let menu = document.getElementsByTagName("menu")[0]
     let list = menu.getElementsByTagName("ul")[0]
     let pos = list.getElementsByClassName("menu-separator")[1]
-    
-    for(let i = 0; i < raids.length; i++) {
+
+    for (let i = 0; i < raids.length; i++) {
         let li = document.createElement("li")
         let d = raids[i].split(":");
-        li.innerHTML = `<a href="game.php?page=fleetTable&galaxy=${d[0]}&system=${d[1]}&planet=${d[2]}&planettype=1&target_mission=1">Attack [${raids[i]}]</a>`       
+        li.innerHTML = `<a href="game.php?page=fleetTable&galaxy=${d[0]}&system=${d[1]}&planet=${d[2]}&planettype=1&target_mission=1">Attack [${raids[i]}]</a>`
         pos.insertAdjacentElement('afterend', li);
         pos = li
     }
@@ -325,92 +288,131 @@ function main(raids) {
 
 }
 
-function replaceSkinText(raids) {
-    if(!raids) return;
 
-var elements = document.getElementsByTagName('*');
+function replaceCommons(elements) {
+    
 
-for (var i = 0; i < elements.length; i++) {
-    var element = elements[i];
+    for (var i = 0; i < elements.length; i++) {
+        var element = elements[i];
 
-    for (var j = 0; j < element.childNodes.length; j++) {
-        var node = element.childNodes[j];
+        if (element.childNodes.length == 1) {
+            var node = element.childNodes[0];
 
-        if (node.nodeType === 3) {
-            var text = node.textContent;
-            
-            // general
-            text = text.replace(/Imperator/g, 'Kapt`n')
-            text = text.replace(/Energie/g, 'Nahrung')
-            text = text.replace(/Kristall/g, 'Gold')
-            text = text.replace(/Metallmine/g, 'Holzfäller')
-            text = text.replace(/Metall/g, 'Holz')
-            text = text.replace(/Deuteriumsynthetisierer/g, 'Destille')
-            text = text.replace(/Deuterium/g, 'Rum')
-            text = text.replace(/Battle Hall/g, 'Bordell')
-
-            // gebäude
-            text = text.replace(/Fusionskraftwerk/g, 'Fleischerei')
-            text = text.replace(/Roboterfabrik/g, 'Hafen')
-            text = text.replace(/Nanitenfabrik/g, 'Sklavenmarkt')
-            text = text.replace(/Solarkraftwerk/g, 'Windmühle')
-            text = text.replace(/TechnoDome/g, 'Bibliothek')
-            text = text.replace(/Raumschiffwerft/g, 'Schiffwerft')
-            text = text.replace(/Raketensilo/g, 'Waffenschmiede')
-            text = text.replace(/Terraformer/g, 'Hafenanlage')          
-            
-            // flotte
-            text = text.replace(/Stationieren/g, 'Überfahrt')
-
-            // schiffe
-            text = text.replace(/Solarsatellit/g, 'Schmugglerboot')
-            text = text.replace(/Recycler/g, 'Entermannschaft')
-            text = text.replace(/Todesstern/g, 'Schwimmende Festung')
-            text = text.replace(/Spionagesonde/g, 'Spione')
-            
-            // Galaxy
-            text = text.replace(/Planet/g, 'Hafen')
-            text = text.replace(/Galaxie/g, 'Weltmeer')
-            text = text.replace(/Galaxy/g, 'Weltmeer')
-            text = text.replace(/Mond/g, 'Eiland')
-
-            // Forschung
-            text = text.replace(/Computertechnik/g, 'Drucktechnik')
-            text = text.replace(/Schildtechnik/g, 'Schifftechnik')
-            text = text.replace(/Raumschiffpanzerung/g, 'Schiffpanzerung')
-            text = text.replace(/Nahrungtechnik/g, 'Kochkunst')
-            text = text.replace(/Hyperraumtechnik/g, 'Takelage')
-            text = text.replace(/Hyperraumantrieb/g, 'Segeln')
-            text = text.replace(/Impulstriebwerk/g, 'Navigation')
-            text = text.replace(/Verbrennungstriebwerk/g, 'Kartographie')
-            text = text.replace(/Lasertechnik/g, 'Zauberei')
-            text = text.replace(/Ionentechnik/g, 'Alchemie')
-            text = text.replace(/Plasmatechnik/g, 'Pyrotechnik')
-            text = text.replace(/Intergalaktisches Forschungsnetzwerk/g, 'Kapitänsbuch')
-            text = text.replace(/Astrophysik/g, 'Astronomie')
-            text = text.replace(/Gravitonforschung/g, 'Verdrängungforschung')
-
-
-            
-            text = text.replace(/Raumschiffwracks/g, 'Schiffwracks')
-            
-
-            
-
-            
-            
-            
-             
-            
-
-            
-            
-
-             
-            node.textContent = text;
+            if (node.nodeType === 3) {
+                var text = node.textContent;
+                // console.log(node);
+                
+                    text = text.replace('Kleiner Transporter', 'kt')
+                    text = text.replace('Großer Transporter', 'gt')
+                    text = text.replace('Leichter Jäger', 'lj')
+                    text = text.replace('Schwerer Jäger', 'sj')
+                    text = text.replace('Kreuzer', 'xer')
+                    text = text.replace('Schlachtschiff', 'ss')
+                    text = text.replace('Bomber', 'bm')
+                    text = text.replace('Zerstörer', 'zd')
+                    text = text.replace('Todesstern', 'ts')
+                    text = text.replace('Recycler', 'rec')
+                    text = text.replace('Spionagesonde', 'spio')
+                    text = text.replace('Solarsatellit', 'sola')
+                    text = text.replace('Kolonieschiff', 'ks')
+                    text = text.replace('Schlachtkreuzer', 'sxer')
+                    text = text.replace(/;/g, '\r\n')
+                    // text = text.replace(/(?=(\d{3})+(?!\d))/g, '$1.')
+                    // text = text.replace("/<\/br>/g","\n")
+                    node.textContent = text;
+                    
+                
+            }
         }
     }
 }
+
+function replaceSkinText(raids) {
+    if (!raids) return;
+
+    var elements = document.getElementsByTagName('*');
+
+    for (var i = 0; i < elements.length; i++) {
+        var element = elements[i];
+
+        for (var j = 0; j < element.childNodes.length; j++) {
+            var node = element.childNodes[j];
+
+            if (node.nodeType === 3) {
+                var text = node.textContent;
+
+                // general
+                text = text.replace(/Imperator/g, 'Kapt`n')
+                text = text.replace(/Energie/g, 'Nahrung')
+                text = text.replace(/Kristall/g, 'Gold')
+                text = text.replace(/Metallmine/g, 'Holzfäller')
+                text = text.replace(/Metall/g, 'Holz')
+                text = text.replace(/Deuteriumsynthetisierer/g, 'Destille')
+                text = text.replace(/Deuterium/g, 'Rum')
+                text = text.replace(/Battle Hall/g, 'Bordell')
+
+                // gebäude
+                text = text.replace(/Fusionskraftwerk/g, 'Fleischerei')
+                text = text.replace(/Roboterfabrik/g, 'Hafen')
+                text = text.replace(/Nanitenfabrik/g, 'Sklavenmarkt')
+                text = text.replace(/Solarkraftwerk/g, 'Windmühle')
+                text = text.replace(/TechnoDome/g, 'Bibliothek')
+                text = text.replace(/Raumschiffwerft/g, 'Schiffwerft')
+                text = text.replace(/Raketensilo/g, 'Waffenschmiede')
+                text = text.replace(/Terraformer/g, 'Hafenanlage')
+
+                // flotte
+                text = text.replace(/Stationieren/g, 'Überfahrt')
+
+                // schiffe
+                text = text.replace(/Solarsatellit/g, 'Schmugglerboot')
+                text = text.replace(/Recycler/g, 'Entermannschaft')
+                text = text.replace(/Todesstern/g, 'Schwimmende Festung')
+                text = text.replace(/Spionagesonde/g, 'Spione')
+
+                // Galaxy
+                text = text.replace(/Planet/g, 'Hafen')
+                text = text.replace(/Galaxie/g, 'Weltmeer')
+                text = text.replace(/Galaxy/g, 'Weltmeer')
+                text = text.replace(/Mond/g, 'Eiland')
+
+                // Forschung
+                text = text.replace(/Computertechnik/g, 'Drucktechnik')
+                text = text.replace(/Schildtechnik/g, 'Schifftechnik')
+                text = text.replace(/Raumschiffpanzerung/g, 'Schiffpanzerung')
+                text = text.replace(/Nahrungtechnik/g, 'Kochkunst')
+                text = text.replace(/Hyperraumtechnik/g, 'Takelage')
+                text = text.replace(/Hyperraumantrieb/g, 'Segeln')
+                text = text.replace(/Impulstriebwerk/g, 'Navigation')
+                text = text.replace(/Verbrennungstriebwerk/g, 'Kartographie')
+                text = text.replace(/Lasertechnik/g, 'Zauberei')
+                text = text.replace(/Ionentechnik/g, 'Alchemie')
+                text = text.replace(/Plasmatechnik/g, 'Pyrotechnik')
+                text = text.replace(/Intergalaktisches Forschungsnetzwerk/g, 'Kapitänsbuch')
+                text = text.replace(/Astrophysik/g, 'Astronomie')
+                text = text.replace(/Gravitonforschung/g, 'Verdrängungforschung')
+
+
+
+                text = text.replace(/Raumschiffwracks/g, 'Schiffwracks')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                node.textContent = text;
+            }
+        }
+    }
 }
 
 
