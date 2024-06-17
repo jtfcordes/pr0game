@@ -57,7 +57,14 @@ function overview(warning_min = 5, sort = true) {
 
         var text = items[i].children.item(2).textContent;
         var c = items[i].children.item(2).getAttribute("class");
-        // console.log(text);
+        console.log(text);
+        var spielerNames = ""
+        const spielerNamesMatch = text.match(/(Spieler) ([\w\s]+) \[PN\]/g);
+        if(spielerNamesMatch != null){
+            console.log(spielerNamesMatch);
+            spielerNames = spielerNamesMatch.map(match => match.replace('Spieler ', ''));
+        }
+        
         const planetNames = text.match(/(Planet|Mond) ([\w\s]+) \[(\d+:\d+:\d+)\]/g).map(match => match.replace('Planet ', ''));
 
 
@@ -150,6 +157,11 @@ function overview(warning_min = 5, sort = true) {
             case 'Stationieren':
                 cell.innerHTML = `von: ${planetNames[0]}</br>nach: ${planetNames[1]}`;
                 break;
+            case 'Spionieren':
+                cell.innerHTML = `von: ${planetNames[0]} (${spielerNames[0]})</br>nach: ${planetNames[1]}`;
+                
+                break;
+
             case 'Abbauen':
                 cell.innerHTML = `von: ${planetNames[0]}</br>nach: Trümmerfeld ${truemNames[0]}`;
                 break;
