@@ -65,7 +65,7 @@ function overview(warning_min = 5, sort = true) {
             spielerNames = spielerNamesMatch.map(match => match.replace('Spieler ', ''));
         }
         
-        const planetNames = text.match(/(Planet|Mond) ([\w\s-,.]+) \[(\d+:\d+:\d+)\]/g).map(match => match.replace('Planet ', ''));
+        const planetNames = text.match(/(Planet|Mond) ([\w\s-,.⁰¹²³⁴⁵⁶⁷⁸⁹]+) \[(\d+:\d+:\d+)\]/g).map(match => match.replace('Planet ', ''));
 
 
         const positionNamesMatch = text.match(/Position \[(\d+:\d+:\d+)\]/g);
