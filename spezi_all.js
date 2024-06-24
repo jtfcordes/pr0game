@@ -65,7 +65,7 @@ function overview(warning_min = 5, sort = true) {
             spielerNames = spielerNamesMatch.map(match => match.replace('Spieler ', ''));
         }
         
-        const planetNames = text.match(/(Planet|Mond) ([\w\s]+) \[(\d+:\d+:\d+)\]/g).map(match => match.replace('Planet ', ''));
+        const planetNames = text.match(/(Planet|Mond) ([\w\s-,.]+) \[(\d+:\d+:\d+)\]/g).map(match => match.replace('Planet ', ''));
 
 
         const positionNamesMatch = text.match(/Position \[(\d+:\d+:\d+)\]/g);
@@ -115,12 +115,17 @@ function overview(warning_min = 5, sort = true) {
 
         }
 
+        var l = matches[0].split(';')
+        var el = document.createElement("span")
+        l.forEach(item => { 
+            el.appendChild(document.createElement("span")).innerHTML = item;
+            el.appendChild(document.createElement("br"));
+            
+            
+        });
+        
+
         let arrow = ''
-        if (what == 'Angreifen') arrow = '↠'
-        if (what == 'Transport') arrow = '⇄'
-        if (what == 'Abbauen') arrow = '⇄'
-        if (what == 'Stationieren') arrow = '⇴'
-        if (what == 'Expedition') arrow = '↯'
 
         const row = document.createElement("tr");
         var cell = document.createElement("td");
@@ -130,7 +135,7 @@ function overview(warning_min = 5, sort = true) {
 
         cell = document.createElement("td");
         cell.setAttribute("width", "20%");
-        cell.innerHTML = `${matches[0]}`;
+        cell.innerHTML = el.outerHTML;
         row.appendChild(cell);
 
         cell = document.createElement("td");
@@ -153,14 +158,23 @@ function overview(warning_min = 5, sort = true) {
 
         switch (what[0]) {
             case 'Angreifen':
+                cell.innerHTML = `von: ${planetNames[0]}</br>nach: ${planetNames[1]}`;
+                break;
             case 'Transport':
+                cell.innerHTML = `von: ${planetNames[0]}</br>nach: ${planetNames[1]}`;
+                break;
+            case 'Halten':
+                cell.innerHTML = `von: ${planetNames[0]}</br>nach: ${planetNames[1]}`;
+                break;
             case 'Stationieren':
                 cell.innerHTML = `von: ${planetNames[0]}</br>nach: ${planetNames[1]}`;
                 break;
             case 'Spionieren':
-                cell.innerHTML = `von: ${planetNames[0]} (${spielerNames[0]})</br>nach: ${planetNames[1]}`;
-                
-                break;
+                if(spielerNames.length > 0){
+                    cell.innerHTML = `von: ${planetNames[0]} (${spielerNames[0]})</br>nach: ${planetNames[1]}`;
+                    break;
+                }
+     
 
             case 'Abbauen':
                 cell.innerHTML = `von: ${planetNames[0]}</br>nach: Trümmerfeld ${truemNames[0]}`;
@@ -226,6 +240,24 @@ function stats() {
 
 }
 
+class TableEdit{
+
+    constructor(table){
+        this.table = table;
+    }
+
+    addColumn(index, content){
+        for (let i = 0; i < this.table.rows.length; i++) {
+            var cell = document.createElement("td");
+            cell.innerHTML = content[i];
+            this.table.rows[i].insertCell(index).appendChild(cell);
+        }
+    }
+   
+}
+
+
+
 
 function fleet() {
     let content = document.getElementsByTagName("content")[0]
@@ -278,27 +310,6 @@ function fleet() {
 
 }
 
-function main(raids) {
-    if (raids == undefined) {
-        raids = []
-    }
-
-    let menu = document.getElementsByTagName("menu")[0]
-    let list = menu.getElementsByTagName("ul")[0]
-    let pos = list.getElementsByClassName("menu-separator")[1]
-
-    for (let i = 0; i < raids.length; i++) {
-        let li = document.createElement("li")
-        let d = raids[i].split(":");
-        li.innerHTML = `<a href="game.php?page=fleetTable&galaxy=${d[0]}&system=${d[1]}&planet=${d[2]}&planettype=1&target_mission=1">A:[${raids[i]}]</a>`
-        pos.insertAdjacentElement('afterend', li);
-        pos = li
-    }
-    li = document.createElement("li")
-    li.setAttribute("class", "menu-separator")
-    pos.insertAdjacentElement('afterend', li);
-
-}
 
 
 function replaceCommons(elements) {
