@@ -20,6 +20,14 @@
     const context = window.location.href.split("?").pop();
     console.log(context);
     
+    // Popup for messages
+    const message_elements = document.getElementsByClassName('message');
+    console.log(message_elements);
+    if (message_elements.length > 0) {
+        let a = message_elements[0].getElementsByTagName('a')[0];
+        a.href = "?page=messages&category=100";
+    }
+
     const tables = document.getElementsByTagName('table');
     listTables(tables);
     
@@ -33,23 +41,19 @@
     menu_editor.edit_item(item_id_nachrichten, "Nachrichten", `game.php?page=messages&category=100`)
     
     
-    const raids = ["2:214:6", "2:214:7", "2:211:5"]
+    const raids = ["2:214:6", "2:214:7", "2:214:12", "2:198:12", "2:196:10", "2:196:11", "2:196:12"];
+    const raidDictionary = raids.reduce((dict, raid) => {
+        const [galaxy, system, planet] = raid.split(":");
+        const key = `A:[${raid}]`;
+        const link = `game.php?page=fleetTable&galaxy=${galaxy}&system=${system}&planet=${planet}& planettype=1&target_mission=1`;
+        dict[key] = link;
+        return dict;
+    }, {});
+
+
     const item_id_separator_1 = 23
-    for (let i = 0; i < raids.length; i++) {
-
-        const d = raids[i].split(":");
-        const link = `game.php?page=fleetTable&galaxy=${d[0]}&system=${d[1]}&planet=${d[2]}&planettype=1&target_mission=1`
-        const name = `A:[${raids[i]}]`
-        menu_editor.insert_item(item_id_separator_1, name, link)
-    }
+    menu_editor.menu_add(item_id_separator_1, raidDictionary)
     menu_editor.insert_separator(item_id_separator_1+raids.length)
-
-
-
-
-    // edit_menu(raids)
-
-    // generateTableNames()
     
     let hasFleet = document.getElementById("fleetTable");
     if (hasFleet) fleet();

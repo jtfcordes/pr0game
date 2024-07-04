@@ -69,34 +69,12 @@ edit_item(item_id, name, link) {
 }
 
 
-menu_add(raids) {
-    if (raids == undefined) {
-        raids = []
+
+menu_add(pos, dict) {
+    for (const [name, link] of Object.entries(dict)) {
+        this.insert_item(pos, name, link)
+        pos++
     }
-    // Menu Element
-    let menu = document.getElementsByTagName("menu")[0]
-    let list = menu.getElementsByTagName("ul")[0]
-    
-    // Add Raids Quicklinks
-    let pos = list.getElementsByClassName("menu-separator")[1]
-    for (let i = 0; i < raids.length; i++) {
-        let li = document.createElement("li")
-        let d = raids[i].split(":");
-        li.innerHTML = `<a href="game.php?page=fleetTable&galaxy=${d[0]}&system=${d[1]}&planet=${d[2]}&planettype=1&target_mission=1">A:[${raids[i]}]</a>`
-        pos.insertAdjacentElement('afterend', li);
-        pos = li
-    }
-
-    // Add All Messages
-    li = document.createElement("li")
-    li.setAttribute("class", "menu-separator")
-    pos.insertAdjacentElement('afterend', li);
-
-    li = document.createElement("li")
-    li.innerHTML = `<a href="game.php?page=messages&category=100">Alle Nachrichten</a>`
-    list.getElementsByTagName("li")[10].insertAdjacentElement('afterend', li);
-    
-
 }
 
 };
