@@ -59,13 +59,13 @@ function overview(warning_min = 5, sort = true) {
         var c = items[i].children.item(2).getAttribute("class");
         console.log(text);
         var spielerNames = ""
-        const spielerNamesMatch = text.match(/(Spieler) ([a-zA-Z0-9 _\-.äöüÄÖÜß⁰¹²³⁴⁵⁶⁷⁸⁹]+) \[PN\]/g);
+        const spielerNamesMatch = text.match(/(Spieler) ([^[]+) \[PN\]/g);
         if(spielerNamesMatch != null){
             console.log(spielerNamesMatch);
             spielerNames = spielerNamesMatch.map(match => match.replace('Spieler ', ''));
         }
         
-        const planetNames = text.match(/(Planet|Mond) ([a-zA-Z0-9 _\-.äöüÄÖÜß⁰¹²³⁴⁵⁶⁷⁸⁹]+) \[(\d+:\d+:\d+)\]/g).map(match => match.replace('Planet ', ''));
+        const planetNames = text.match(/(Planet|Mond) ([^[]+) \[(\d+:\d+:\d+)\]/g).map(match => match.replace('Planet ', ''));
 
 
         const positionNamesMatch = text.match(/Position \[(\d+:\d+:\d+)\]/g);
